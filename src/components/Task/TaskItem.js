@@ -1,5 +1,7 @@
 
 import React, { Component } from 'react';
+import { connect } from 'react-redux';
+import * as actions from './../../actions/index';
 
 // import TaskForm from './components/TaskForm';
 // import Control from './components/Control';
@@ -16,15 +18,15 @@ class TaskItem extends Component {
   }
 
   onUpdateStatus() {
-    this.props.callUpdateStatus(this.props.index);
+    this.props.onUpdateStatus(this.props.index);
   }
 
   onDeleteTask() {
-    this.props.callDeleteTask(this.props.index);
+    this.props.onDeleteTask(this.props.index);
   }
 
   onUpdateTask() {
-    this.props.callUpdateTask(this.props.index);
+    this.props.onUpdateTask(this.props.index, this.props.task);
   }
 
   render() {
@@ -50,4 +52,23 @@ class TaskItem extends Component {
   }
 }
 
-export default TaskItem;
+const myStateToProps = (state) => {
+  return {
+  }
+}
+
+const mapDispatchToProps = (dispatch, props) => {
+  return {
+    onUpdateStatus : (index) => {
+      dispatch(actions.updateStatus(index));
+    },
+    onDeleteTask : (index) => {
+      dispatch(actions.deleteTask(index));
+    },
+    onUpdateTask : (index, task) => {
+      dispatch(actions.updateTask(index, task));
+    }
+  }
+}
+
+export default connect(myStateToProps, mapDispatchToProps) (TaskItem);

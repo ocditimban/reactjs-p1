@@ -6,6 +6,7 @@ import FormAddProduct from './components/FormAddProduct';
 import ProductsList from './components/ProductsList';
 import ColorApp from './components/Color/ColorApp';
 import TaskApp from './components/Task/TaskApp';
+// import './training/Demo.js';
 
 class App extends Component {
 

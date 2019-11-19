@@ -3,38 +3,13 @@ import React, { Component } from 'react';
 import TaskForm from './TaskForm';
 import Control from './Control';
 import TaskItem from './TaskItem';
+import { connect } from 'react-redux';
 
 class TaskList extends Component {
 
   constructor(props) {
     super(props);
-    this.callUpdateStatus = this.callUpdateStatus.bind(this);
-    this.calDeleteTask = this.calDeleteTask.bind(this);
-    this.callUpdateTask = this.callUpdateTask.bind(this);
   }
-
-  callUpdateStatus(index) {
-    this.props.tasks[index].status = !this.props.tasks[index].status;
-    this.setState({
-        tasks: this.props.tasks
-    });
-
-    localStorage.setItem('tasks', JSON.stringify(this.props.tasks));
-  }
-
-  calDeleteTask(index) {
-    this.props.tasks.splice(index, 1);
-    this.setState({
-        tasks: this.props.tasks
-    });
-
-    localStorage.setItem('tasks', JSON.stringify(this.props.tasks));
-  }
-
-  callUpdateTask(index) {
-      this.props.callUpdateTask(index);
-  }
-
 
   showTaskList(tasks) {
     let result = tasks.map((task, index) => {
@@ -42,15 +17,14 @@ class TaskList extends Component {
             key={task.id} 
             index={index} 
             task={task}
-            callUpdateStatus={this.callUpdateStatus}
-            callDeleteTask={this.calDeleteTask}
-            callUpdateTask={this.callUpdateTask}
         />
     });
     return result;
   }
 
   render() {
+    var {tasks} = this.props;
+
     return (
         <table className="table">
             <thead>
@@ -82,7 +56,7 @@ class TaskList extends Component {
                         </select>    
                     </td>
                 </tr>
-                { this.showTaskList(this.props.tasks) }
+                { this.showTaskList(tasks) }
                 
             </tbody>
         </table>
@@ -90,4 +64,10 @@ class TaskList extends Component {
   }
 }
 
-export default TaskList;
+const myStateToProps = (state) => {
+    return {
+        tasks : state.tasks
+    }
+};
+
+export default connect(myStateToProps, null) (TaskList);

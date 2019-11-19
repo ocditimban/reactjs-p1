@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
+import { connect } from 'react-redux';
+import * as actions from './../../actions/index';
 
-class Control extends Component {
+class TaskForm extends Component {
 
   constructor(props) {
     super(props);
@@ -17,12 +19,12 @@ class Control extends Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    if(nextProps.task.index || nextProps.task.index === 0) {
+    if(nextProps.taskEditing) {
       this.setState({
-        index: nextProps.task.index,
-        id: nextProps.task.id,
-        name: nextProps.task.name,
-        status: nextProps.task.status,
+        index: nextProps.taskEditing.index,
+        id: nextProps.taskEditing.id,
+        name: nextProps.taskEditing.name,
+        status: nextProps.taskEditing.status,
       });
     }
   }
@@ -41,7 +43,7 @@ class Control extends Component {
 
   onSubmit(event) {
     event.preventDefault();
-    this.props.onSubmit(this.state);
+    this.props.onSaveTask(this.state);
   }
 
   onDelete() {
@@ -52,7 +54,7 @@ class Control extends Component {
   }
 
   render() {
-    console.log(this.props.task);
+    var {id} = this.props.taskEditing;
     return (
         <div className="container">
             <div className="row">
@@ -60,7 +62,7 @@ class Control extends Component {
                   <div className="panel">
                     <div className="panel-heading">
                       <div className="panel-title">
-                         {this.props.task.id ? 'Update Task' : 'Add Task'}
+                         {id ? 'Update Task' : 'Add Task'}
                       </div>
                     </div>
                     <div className="panel-body">
@@ -97,4 +99,18 @@ class Control extends Component {
   }
 }
 
-export default Control;
+const myStateToProps = (state) => {
+  return {
+    taskEditing: state.taskEditing
+  }
+}
+
+const mapDispatchToProps = (dispatch, props) => {
+  return {
+    onSaveTask : (task) => {
+      dispatch(actions.saveTask(task));
+    }
+  }
+}
+
+export default connect(myStateToProps, mapDispatchToProps) (TaskForm);
